@@ -1,0 +1,5 @@
+D:\УНИВЕР\VIII семестр\Мировые информационные ресурсы\Есипенко\NotePad\NotePad\bin\NotePad.dll
+D:\УНИВЕР\VIII семестр\Мировые информационные ресурсы\Есипенко\NotePad\NotePad\bin\NotePad.pdb
+D:\УНИВЕР\VIII семестр\Мировые информационные ресурсы\Есипенко\NotePad\NotePad\obj\Debug\NotePad.csprojResolveAssemblyReference.cache
+D:\УНИВЕР\VIII семестр\Мировые информационные ресурсы\Есипенко\NotePad\NotePad\obj\Debug\NotePad.dll
+D:\УНИВЕР\VIII семестр\Мировые информационные ресурсы\Есипенко\NotePad\NotePad\obj\Debug\NotePad.pdb

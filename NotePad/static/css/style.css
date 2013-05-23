@@ -1,0 +1,59 @@
+*.bold {
+    font-weight: bold;
+}
+
+*.underline {
+    text-decoration: underline;
+}
+
+*.italic {
+    font-style: italic;
+}
+
+*.tabText {
+    font-family: 'Consolas',sans-serif;
+    font-size: 16px;
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+.removeTab {
+    margin-right: 10px;   
+}
+
+.myToggleButtons {
+    padding-bottom: 20px;
+}
+
+.myCreateButton {
+    padding-top: 20px;
+}
+
+/* bootstrap override */
+.tabs-left {
+    border-right-style: solid;
+    border-color: #E5E5E5;
+    border-width: 1px;
+}
+
+.nav {
+    margin-bottom: 0;
+}
+
+.tabs-left > .nav-tabs {
+    margin-right: 0;
+}
+
+.tab-content {
+    border-color: #E5E5E5;
+    border-top-style: solid;
+    border-width: 1px;
+}
+
+.nav-tabs > li {
+    margin-right: -1px;
+}
+
+form {
+    margin-bottom: 0;
+}

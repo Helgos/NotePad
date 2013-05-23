@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<link href="static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link href="static/css/style.css" rel="stylesheet" media="screen">
+		<script src="static/js/jquery-1.9.1.js"></script>
+		<script src="static/js/bootstrap.min.js"></script>
+		<script type='text/javascript' src="static/js/knockout-2.2.1.js"></script>
+		<script type='text/javascript' src="static/js/rangy-core.js"></script>
+		<script type='text/javascript' src="static/js/rangy-cssclassapplier.js"></script>
+		<script type='text/javascript' src="static/js/rangy-selectionsaverestore.js"></script>
+		<script type='text/javascript' src="static/js/rangy-serializer.js"></script>
+		
+		<script type="text/javascript">
+		    function gEBI(id) {
+		        return document.getElementById(id);
+		    }
+
+		    var italicApplier, boldApplier, underlineApplier;
+
+		    function toggleItalic() {
+		        italicApplier.toggleSelection();
+		    }
+
+		    function toggleBold() {
+		        boldApplier.toggleSelection();
+		    }
+
+		    function toggleUnderline() {
+		        underlineApplier.toggleSelection();
+		    }
+
+		    window.onload = function() {
+		        rangy.init();
+
+		        // Enable buttons
+		        var cssClassApplierModule = rangy.modules.CssClassApplier;
+
+		        // Next line is pure paranoia: it will only return false if the browser has no support for ranges,
+		        // selections or TextRanges. Even IE 5 would pass this test.
+		        if (rangy.supported && cssClassApplierModule && cssClassApplierModule.supported) {
+		            boldApplier = rangy.createCssClassApplier("bold");
+
+		            italicApplier = rangy.createCssClassApplier("italic");
+
+		            underlineApplier = rangy.createCssClassApplier("underline");
+
+		            var toggleBoldButton = gEBI("toggleBoldButton");
+		            toggleBoldButton.disabled = false;
+		            toggleBoldButton.ontouchstart = toggleBoldButton.onmousedown = function() {
+		                toggleBold();
+		                return false;
+		            };
+
+		            var toggleItalicButton = gEBI("toggleItalicButton");
+		            toggleItalicButton.disabled = false;
+		            toggleItalicButton.ontouchstart = toggleItalicButton.onmousedown = function() {
+		                toggleItalic();
+		                return false;
+		            };
+
+		            var toggleUnderlineButton = gEBI("toggleUnderlineButton");
+		            toggleUnderlineButton.disabled = false;
+		            toggleUnderlineButton.ontouchstart = toggleUnderlineButton.onmousedown = function() {
+		                toggleUnderline();
+		                return false;
+		            };
+		        }
+		    };
+		</script>
+	</head>
+	<body>
+		<div class="container">
+		    <div id="buttons" class="myToggleButtons">
+		        <div class="btn-group">
+		            <button id="toggleBoldButton" class="btn unselectable" type="button" unselectable="on"><span class="bold">Bold</span></button>
+		            <button id="toggleItalicButton" class="btn unselectable" type="button" unselectable="on"><span class="italic">Italic</span></button>
+		            <button id="toggleUnderlineButton" class="btn unselectable" type="button" unselectable="on"><span class="underline">Underline</span></button>
+		        </div>
+		    </div>
+		    <div class="tabbable tabs-left">
+		        <ul class="nav nav-tabs" data-bind="foreach: tabs">
+		            <li>
+		                <a data-toggle="tab" data-bind="attr: { href: '#' + tabId }"><span data-bind="text: tabName"></span></a>
+		            </li>
+		        </ul>
+		        <div class="tab-content" data-bind="foreach: tabs">
+		            <div data-bind="attr: { id: tabId }" class="tab-pane">
+		                <p class="removeTab pull-right"><a href="#" data-bind="click: $parent.removeTab">Remove tab</a></p>
+		                <p class="tabText" data-bind="text: tabText" contenteditable="true"></p>
+		            </div>
+		        </div>
+		    </div>
+
+		    <!-- Кнопка для вызова модального окна -->
+		    <div class="myCreateButton">
+		        <a href="#myModal" role="button" class="btn btn-primary" data-toggle="modal">Create new tab</a>
+		    </div>
+			<!-- Модальное окно bootstrap -->	         
+		    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		        <div class="modal-header">
+		            <button type="button" class="close" aria-hidden="true" data-dismiss="modal">×</button>
+		            <h3 id="myModalLabel">Create new tab</h3>
+		        </div>
+
+		        <form data-bind="submit: addTab">
+		            <div class="modal-body">       
+		                <div class="control-group">
+		                    <label class="control-label">Tab name:</label>
+		                    <div class="controls">
+		                        <input type="text" data-bind='value: modalName, valueUpdate: "afterkeydown"'/>
+		                    </div>
+		                    <label class="control-label">Tab text:</label>
+		                    <div class="controls">
+		                        <textarea data-bind='value: modalText, valueUpdate: "afterkeydown"'></textarea>
+		                    </div>
+		                </div>
+		            </div>
+		            <div class="modal-footer">
+		                <button class="btn" aria-hidden="true" data-dismiss="modal">Close</button>
+		                <button type="submit" class="btn btn-primary" data-bind="enable: modalName().length > 0">Add tab (background)</button>
+		            </div>
+		        </form>
+		    </div>
+		</div>
+
+		<script type="text/javascript">
+		    
+		    // Функция генерирует случайный 8-значный код для записи в id закладки
+		    // Решение проблемы, что при удалении закладки возникала ситуация, что у двух закладок id совпадает
+		    function randomString() {
+		        var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+		        var string_length = 8;
+		        var randomstring = '';
+		        for (var i = 0; i < string_length; i++) {
+		            var rnum = Math.floor(Math.random() * chars.length);
+		            randomstring += chars.substring(rnum, rnum + 1);
+		        }
+		        return randomstring;
+		    }
+
+		    // This is a simple *viewmodel* - JavaScript that defines the data and behavior of your UI
+		    var AppViewModel = function() {
+		        var self = this;
+		        // Editable data
+		        this.tabs = ko.observableArray();
+		        this.modalName = ko.observable("");
+		        this.modalText = ko.observable("");
+		        this.tabs.push({ tabId: randomString(), tabName: "Имя закладки", tabText: "Текст на русском языке" });
+		        this.tabs.push({ tabId: randomString(), tabName: "TabName2", tabText: "Other text for tab2 seats here" });
+		        this.tabs.push({ tabId: randomString(), tabName: "Закладка 3", tabText: "Текст на закладке. Текст не редактируемый" });
+
+		        // Operations
+		        this.addTab = function() {
+		            if (this.modalName() != "") { // Проверка, что у закладки есть имя
+		                this.tabs.push({ tabId: randomString(), tabName: this.modalName(), tabText: this.modalText() });
+		                this.modalName(""); // Очищаем значениe переменной, иначе при вызове модального окна увидим старые значения
+		                this.modalText("");
+		            }
+		        }.bind(this);
+
+		        self.removeTab = function() { 
+		            self.tabs.remove(this)
+		        };
+		    }
+
+		    // Activates knockout.js
+		    ko.applyBindings(new AppViewModel());
+		    
+		</script>
+	</body>
+</html>
